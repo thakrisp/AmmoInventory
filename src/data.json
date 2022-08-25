@@ -1,0 +1,50 @@
+[
+	{
+		"name": "9MM",
+		"count": 1500,
+		"velocity": "1,150 fps",
+		"type": "Lead tip"
+	},
+	{
+		"name": "40Cal",
+		"count": 250,
+		"velocity": "920 fps",
+		"type": "Lead tip"
+	},
+	{
+		"name": "45Cal",
+		"count": 120,
+		"velocity": "1,145 fps",
+		"type": "Lead tip"
+	},
+	{
+		"name": "223",
+		"count": 450,
+		"velocity": "2,849 fps",
+		"type": "FMJ"
+	},
+	{
+		"name": "556",
+		"count": 50,
+		"velocity": "2,740 fps",
+		"type": "Green tip"
+	},
+	{
+		"name": "762",
+		"count": 25,
+		"velocity": "2,559 fps",
+		"type": "Green tip"
+	},
+	{
+		"name": "357 Magnum",
+		"count": 550,
+		"velocity": "1,240 fps",
+		"type": "Lead tip"
+	},
+	{
+		"name": "12 Gauge",
+		"count": 75,
+		"velocity": "1,560 fps",
+		"type": "Slug"
+	}
+]
