@@ -1,14 +1,45 @@
 <script lang="ts">
+	import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 	import { slide } from 'svelte/transition';
 	import { bounceOut } from 'svelte/easing';
 	import Login from '$lib/Login.svelte';
 	import SignUp from '$lib/SignUp.svelte';
+	import { auth } from '../../../firebase';
+	import { goto } from '$app/navigation';
+
 	let email = '';
 	let username = '';
 	let password = '';
 	let confirmPassword = '';
 	let isLogin = true;
-	let error = 'Missing password';
+
+	$: error = '';
+
+	function signUpUser() {
+		createUserWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.error(`${errorCode}: ${errorMessage}`);
+			});
+	}
+
+	function signInUser() {
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				goto('/home');
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.error(`${errorCode}: ${errorMessage}`);
+			});
+	}
 
 	$: passwordMatch = password !== '' && confirmPassword !== '' && password === confirmPassword;
 
@@ -23,7 +54,8 @@
 	function Submit() {
 		if (isLogin) {
 			if (email !== '' && password !== '') {
-				console.log({ email, password });
+				signInUser();
+				//console.log({ email, password });
 			} else {
 				console.log('ERROR: Missing username or password');
 			}

@@ -1,11 +1,14 @@
 <script lang="ts">
+	import Popup from '$lib/Popup.svelte';
 	export let ammo: data;
+	let showModal = false;
 
 	interface data {
-		name: String;
+		uid: number;
+		name: string;
 		count: number;
-		velocity: String;
-		type: String;
+		velocity: number;
+		type: string;
 	}
 
 	//src="https://images.unsplash.com/photo-1581956258836-259a7cdd68eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
@@ -16,10 +19,21 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
+{#if showModal}
+	<Popup
+		bind:name={ammo.name}
+		bind:count={ammo.count}
+		bind:velocity={ammo.velocity}
+		bind:type={ammo.type}
+		on:close={() => (showModal = false)}
+	/>
+{/if}
+
 <div
+	on:click={() => (showModal = true)}
 	class="{ammo.count > 50
 		? 'bg-slate-300 hover:bg-slate-400 hover:shadow-slate-400/50'
-		: 'bg-red-300 hover:bg-red-400 hover:shadow-red-400/50'} rounded-md hover:scale-105 lg:hover:scale-110 hover:shadow-md"
+		: 'bg-red-300 hover:bg-red-400 hover:shadow-red-400/50'} rounded-md"
 >
 	<div class="relative justify-center items-center border-black ">
 		<img

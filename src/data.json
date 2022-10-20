@@ -1,50 +1,12 @@
 [
-	{
-		"name": "9MM",
-		"count": 1500,
-		"velocity": "1,150 fps",
-		"type": "Lead tip"
-	},
-	{
-		"name": "40Cal",
-		"count": 250,
-		"velocity": "920 fps",
-		"type": "Lead tip"
-	},
-	{
-		"name": "45Cal",
-		"count": 120,
-		"velocity": "1,145 fps",
-		"type": "Lead tip"
-	},
-	{
-		"name": "223",
-		"count": 450,
-		"velocity": "2,849 fps",
-		"type": "FMJ"
-	},
-	{
-		"name": "556",
-		"count": 50,
-		"velocity": "2,740 fps",
-		"type": "Green tip"
-	},
-	{
-		"name": "762",
-		"count": 25,
-		"velocity": "2,559 fps",
-		"type": "Green tip"
-	},
-	{
-		"name": "357 Magnum",
-		"count": 550,
-		"velocity": "1,240 fps",
-		"type": "Lead tip"
-	},
-	{
-		"name": "12 Gauge",
-		"count": 75,
-		"velocity": "1,560 fps",
-		"type": "Slug"
-	}
+	{ "uid": 1001, "name": "9mm", "count": 1500, "velocity": 1150, "type": "Lead tip" },
+	{ "uid": 1002, "name": "40Cal", "count": 250, "velocity": 920, "type": "Lead tip" },
+	{ "uid": 1002, "name": "45Cal", "count": 120, "velocity": 1145, "type": "Lead tip" },
+	{ "uid": 1003, "name": "223", "count": 450, "velocity": 2849, "type": "FMJ" },
+	{ "uid": 1004, "name": "556", "count": 50, "velocity": 2740, "type": "Green tip" },
+	{ "uid": 1005, "name": "762", "count": 25, "velocity": 2559, "type": "Green tip" },
+	{ "uid": 1006, "name": "357 Magnum", "count": 550, "velocity": 1240, "type": "Lead tip" },
+	{ "uid": 1007, "name": "12 Gauge", "count": 50, "velocity": 1560, "type": "Slug" },
+	{ "uid": 1008, "name": "12 Gauge", "count": 500, "velocity": 1560, "type": "Bird Shot #7" },
+	{ "uid": 1009, "name": "12 Gauge", "count": 250, "velocity": 1560, "type": "Buck shot" }
 ]
