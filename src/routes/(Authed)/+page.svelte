@@ -2,7 +2,7 @@
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
 
-	import data from '../../../data.json';
+	import data from '../../data.json';
 
 	$: filteredData = data;
 	let selected: string;
