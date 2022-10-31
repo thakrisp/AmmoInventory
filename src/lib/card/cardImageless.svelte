@@ -24,7 +24,7 @@
 				{name}
 			</div>
 			<div class="text-sm font-extralight">
-				Velocity: <span class="font-semibold">{randomnum}</span>
+				Grain: <span class="font-semibold">{randomnum}</span>
 			</div>
 			<div class="text-sm font-extralight">Type: <span class="font-semibold">Lead Tip</span></div>
 		</div>

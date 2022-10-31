@@ -1,11 +1,16 @@
 <script lang="ts">
-	import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 	import { slide } from 'svelte/transition';
 	import { bounceOut } from 'svelte/easing';
+	import { goto } from '$app/navigation';
+	import {
+		createUserWithEmailAndPassword,
+		signInWithEmailAndPassword,
+		updateProfile
+	} from 'firebase/auth';
+	import { auth } from '../../../firebase';
+
 	import Login from '$lib/Login.svelte';
 	import SignUp from '$lib/SignUp.svelte';
-	import { auth } from '../../../firebase';
-	import { goto } from '$app/navigation';
 
 	let email = '';
 	let username = '';
@@ -13,14 +18,22 @@
 	let confirmPassword = '';
 	let isLogin = true;
 
-	$: error = '';
+	if (import.meta.env.DEV) {
+		email = 'Test@test.com';
+		password = 'testPass';
+	}
+
+	let error = '';
 
 	function signUpUser() {
 		createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-				// ...
+			.then((_) => {
+				if (auth.currentUser) {
+					updateProfile(auth.currentUser, {
+						displayName: username
+					});
+					goto('/');
+				}
 			})
 			.catch((error) => {
 				const errorCode = error.code;
@@ -29,19 +42,21 @@
 			});
 	}
 
-	function signInUser() {
-		signInWithEmailAndPassword(auth, email, password)
+	async function signInUser() {
+		let test = await signInWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
-				goto('/home');
+				goto('/');
 			})
 			.catch((error) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				console.error(`${errorCode}: ${errorMessage}`);
+				return `${errorCode}: ${errorMessage}`;
 			});
+
+		if (test) error = test;
 	}
 
-	$: passwordMatch = password !== '' && confirmPassword !== '' && password === confirmPassword;
+	//$: passwordMatch = password !== '' && confirmPassword !== '' && password === confirmPassword;
 
 	$: isDisabled = isLogin
 		? email !== '' && password !== ''
@@ -55,19 +70,18 @@
 		if (isLogin) {
 			if (email !== '' && password !== '') {
 				signInUser();
-				//console.log({ email, password });
 			} else {
 				console.log('ERROR: Missing username or password');
 			}
 		} else {
 			if (email !== '' && username !== '' && password !== '' && confirmPassword !== '') {
 				if (password === confirmPassword) {
-					console.log({ email, username, password, confirmPassword });
+					signUpUser();
 				} else {
-					console.log('Passwords dont match');
+					error = 'Passwords dont match';
 				}
 			} else {
-				console.log('Error: Missing data to Signup');
+				error = 'Error: Missing data to Signup';
 			}
 		}
 	}
@@ -107,10 +121,23 @@
 					>
 						<div class="pt-1">Error: {error}</div>
 						<div
-							class="w-8 justify-center flex pt-1 hover:bg-black/5 hover:rounded-full"
+							class="w-8 justify-center flex h-fit pt-1 hover:bg-black/5 hover:rounded-full"
 							on:click|preventDefault={() => (error = '')}
 						>
-							✖
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="w-6 h-6"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
 						</div>
 					</div>
 				{/if}
@@ -119,19 +146,20 @@
 				{:else}
 					<SignUp bind:email bind:username bind:password bind:confirmPassword />
 				{/if}
-				<div class="flex flex-col justify-between mt-5">
-					{#if isLogin}
-						<button class="underline flex">Forgot Password</button>
-					{/if}
+				<div class="flex flex-row-reverse justify-between mt-2">
 					<div class="flex justify-end">
 						<input
+							autofocus
 							disabled={isDisabled}
 							on:click|preventDefault={Submit}
 							type="submit"
-							class="text-lg px-3 py-1 rounded-lg max-w-max hover:bg-blue-300/50 disabled:bg-gray-500 disabled:opacity-25"
+							class="text-lg px-3 py-1 rounded-lg max-w-max bg-blue-500/50 hover:bg-blue-700/50 disabled:bg-gray-500 disabled:opacity-25"
 							value={isLogin ? 'Login' : 'SignUp'}
 						/>
 					</div>
+					{#if isLogin}
+						<button class="underline flex self-center">Forgot Password</button>
+					{/if}
 				</div>
 			</div>
 		</div>

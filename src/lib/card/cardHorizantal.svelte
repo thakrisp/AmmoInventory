@@ -29,7 +29,7 @@
 			<div class="font-semibold text-xl flex flex-wrap ">
 				{name}
 			</div>
-			<div class="text-sm font-extralight">Velocity:</div>
+			<div class="text-sm font-extralight">Grain:</div>
 			<div class="text-sm font-extralight">Type:</div>
 		</div>
 		<div class=" flex items-baseline">

@@ -1,48 +1,73 @@
 <script lang="ts">
+	import type { PageData } from './$types';
+
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
+	import { userData } from '../../store/user';
+	import { onMount } from 'svelte';
 
-	import data from '../../data.json';
+	let innerWidth = 0;
+	//import jsonData from '../../data.json';
 
-	$: filteredData = data;
-	let selected: string;
+	export let data: PageData;
+	let parsedData: userAmmo[];
+	let dropDownSelected: string;
+	let optionsDropDown: string[] = [];
 
-	var resArr: string[] = [];
-	data.filter((item) => {
-		var i = resArr.findIndex((x) => x == item.name);
+	parsedData = Object.values(data);
+	$: filteredData = parsedData.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+
+	interface userAmmo {
+		name: string;
+		count: number;
+		grain: number;
+		type: string;
+	}
+
+	parsedData.filter((item) => {
+		var i = optionsDropDown.findIndex((x) => x == item.name);
 		if (i <= -1) {
-			resArr.push(item.name);
+			optionsDropDown.push(item.name);
 		}
 		return null;
 	});
 
 	function filterData(selected: string) {
 		if (selected === 'All') {
-			filteredData = data;
+			filteredData = parsedData;
 			return;
 		}
-		filteredData = data.filter((e) => {
+
+		filteredData = parsedData.filter((e) => {
 			return e.name === selected;
 		});
+
 		return;
 	}
 
-	let innerWidth = 0;
+	onMount(() => {
+		console.log('On Mount');
+		console.log(parsedData);
+	});
 </script>
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="Ammo cache" />
 </svelte:head>
 
 <svelte:window bind:innerWidth />
 
 <div class="flex flex-col">
-	<div class="flex justify-end mr-5">
-		<select name="" id="" bind:value={selected} on:change={() => filterData(selected)}>
+	<div class="flex justify-center md:justify-end mr-5">
+		<select
+			class="select select-primary w-full max-w-xs"
+			bind:value={dropDownSelected}
+			on:change={() => filterData(dropDownSelected)}
+		>
 			<option>All</option>
-			{#each resArr as ammo}
-				<option value={ammo}>{ammo}</option>
+			{#each optionsDropDown as ammoOptions}
+				<option value={ammoOptions}>{ammoOptions}</option>
 			{/each}
 		</select>
 	</div>
@@ -57,6 +82,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-</style>

@@ -1,8 +1,8 @@
 <script lang="ts">
-	export let count = 0;
-	export let name = '';
-	export let type = '';
-	export let velocity = 0;
+	export let count: number;
+	export let name: string;
+	export let type: string;
+	export let grain: number;
 
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
@@ -11,7 +11,7 @@
 
 	let modal: HTMLDivElement;
 
-	const handle_keydown = (e: { key: string; shiftKey: any; preventDefault: () => void; }) => {
+	const handle_keydown = (e: { key: string; shiftKey: any; preventDefault: () => void }) => {
 		if (e.key === 'Escape') {
 			close();
 			return;
@@ -46,30 +46,39 @@
 
 <div class="modal-background z-40" on:click={close} />
 
-<div class="modal z-50" role="dialog" aria-modal="true" bind:this={modal}>
-	<div class="w-1/2">
-		<div class="flex flex-col items-end">
-			<div class="my-2">
-				<label for="AmmoName">Ammo</label>
-				<input type="text" name="AmmoName" id="" bind:value={name} class="pl-2" />
-			</div>
-			<div class="my-2">
-				<label for="AmmoCount">Amount</label>
-				<input type="number" name="AmmoCount" id="" bind:value={count} class="pl-2" />
-			</div>
-			<div class="my-2">
-				<label for="AmmoType">Type of round</label>
-				<input type="text" name="Ammotype" id="" bind:value={type} class="pl-2" />
-			</div>
-			<div class="my-2">
-				<label for="Ammovelocity">Velocity</label>
-				<input type="text" name="AmmoVelocity" id="" bind:value={velocity} class="pl-2" /> FPS
-			</div>
-		</div>
+<div class="modalOwn z-50" role="dialog" aria-modal="true" bind:this={modal}>
+	<!-- svelte-ignore a11y-autofocus -->
+	<div class="flex justify-end" autofocus on:click={close}>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="w-6 h-6 cursor-pointer"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
 	</div>
 
-	<!-- svelte-ignore a11y-autofocus -->
-	<button autofocus on:click={close}>close modal</button>
+	<div class="flex flex-col">
+		<div class="my-2 flex">
+			<label for="AmmoName">Ammo</label>
+			<input type="text" name="AmmoName" id="" bind:value={name} class="pl-2" />
+		</div>
+		<div class="my-2 flex">
+			<label for="AmmoCount">Amount</label>
+			<input type="number" name="AmmoCount" id="" bind:value={count} class="pl-2" />
+		</div>
+		<div class="my-2 flex">
+			<label for="AmmoType">Type of round</label>
+			<input type="text" name="Ammotype" id="" bind:value={type} class="pl-2" />
+		</div>
+		<div class="my-2 flex">
+			<label for="AmmoGrain">grain</label>
+			<input type="number" name="AmmoGrain" id="" bind:value={grain} class="pl-2" />
+		</div>
+	</div>
 </div>
 
 <style>
@@ -90,21 +99,20 @@
 		background: rgba(0, 0, 0, 0.4);
 	}
 
-	.modal {
+	.modalOwn {
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		width: calc(100vw - 4em);
 		max-width: 32em;
 		max-height: calc(100vh - 4em);
-		overflow: auto;
+		/* overflow: auto; */
 		transform: translate(-50%, -50%);
 		padding: 1em;
 		border-radius: 0.2em;
 		background: white;
 	}
 
-	button {
-		display: block;
+	label {
+		font-weight: 600;
 	}
 </style>

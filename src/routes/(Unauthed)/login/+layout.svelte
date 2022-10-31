@@ -2,8 +2,8 @@
 	import '../../../app.css';
 </script>
 
-<div class="login">
-	<slot />
+<div class="login text-slate-900">
+	<slot class="" />
 </div>
 
 <style>
