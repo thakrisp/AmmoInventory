@@ -1,25 +1,22 @@
 <script lang="ts">
 	import '../app.css';
-	import { user as userStore } from '../store/user';
+	import { user as userStore, userData } from '../store/user';
 	import { auth } from '../firebase';
-	import { connectAuthEmulator, onAuthStateChanged } from 'firebase/auth';
-	import { connectFirestoreEmulator } from 'firebase/firestore';
+	import { onAuthStateChanged } from 'firebase/auth';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-
-	import { db } from '../firebase';
-
-	if (import.meta.env.DEV) {
-		//connectAuthEmulator(auth, 'http://localhost:9099');
-		//connectFirestoreEmulator(db, 'localhost', 8081);
-	}
 
 	onMount(() => {
 		onAuthStateChanged(auth, (user) => {
 			if (!user) {
 				goto('/login');
+			} else {
+				userStore.set({ uid: user?.uid, displayName: user?.displayName, email: user?.email });
+				localStorage.setItem(
+					'user',
+					JSON.stringify({ uid: user?.uid, displayName: user?.displayName, email: user?.email })
+				);
 			}
-			userStore.set({ uid: user?.uid, displayName: user?.displayName });
 		});
 	});
 </script>

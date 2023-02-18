@@ -1,6 +1,8 @@
 import { initializeApp } from 'Firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { connectAuthEmulator } from 'firebase/auth';
+import { connectFirestoreEmulator } from 'firebase/firestore';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyByE09WSm_5WGyVjy-ILfx3ELrWT-qLhbA',
@@ -14,6 +16,11 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
+export const db = getFirestore(app);
+
 export const auth = getAuth(app);
 
-export const db = getFirestore(app);
+if (import.meta.env.DEV) {
+	connectAuthEmulator(auth, 'http://localhost:9099');
+	connectFirestoreEmulator(db, 'localhost', 8081);
+}

@@ -2,12 +2,12 @@
 	import logo2 from './logo.png';
 	import { auth } from '../../firebase';
 	import { signOut } from 'firebase/auth';
-	//import { user } from '../../store/user';
 
 	function signOutUser() {
-		console.log('LOGING OUT');
 		signOut(auth).then(() => {
-			//user.set({});
+			localStorage.removeItem('UserData');
+			localStorage.removeItem('User');
+			localStorage.removeItem('restockNumber');
 		});
 	}
 </script>
@@ -30,12 +30,14 @@
 				class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 			>
 				<li>
-					<a href="/profile" class="justify-between">
-						Profile
+					<a href="/profile" class="justify-between"> Profile </a>
+				</li>
+				<li>
+					<a href="/settings"
+						>Settings
 						<span class="badge">New</span>
 					</a>
 				</li>
-				<li><a href="/settings">Settings</a></li>
 				<li on:click={signOutUser}><a>Logout</a></li>
 			</ul>
 		</div>

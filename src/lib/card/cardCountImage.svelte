@@ -1,31 +1,22 @@
 <script lang="ts">
-	//import Popup from '$lib/Popup.svelte';
-	import Popup2 from '$lib/popup2.svelte';
-	export let ammo: data;
+	import type { userAmmo } from 'src/types';
+	import Popup from '$lib/popup.svelte';
+	import { restockNumber } from '../../store/user';
+	export let ammo: userAmmo;
 	let showModal = false;
 
-	interface data {
-		uid?: number;
-		name: string;
-		count: number;
-		grain: number;
-		type: string;
-	}
 	//src="https://images.unsplash.com/photo-1581956258836-259a7cdd68eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
 {#if showModal}
-	<Popup2
-		bind:name={ammo.name}
-		bind:count={ammo.count}
-		bind:grain={ammo.grain}
-		bind:type={ammo.type}
+	<Popup
+		ammoUUID={ammo.ammoUUID}
+		name={ammo.name}
+		count={ammo.count}
+		grain={ammo.grain}
+		type={ammo.type}
 		on:close={() => (showModal = false)}
+		on:newData
 	/>
 {/if}
 
@@ -33,7 +24,7 @@
 <label for="my-modal" class="">
 	<div
 		on:click={() => (showModal = true)}
-		class="{ammo.count > 50
+		class="{ammo.count > $restockNumber
 			? 'bg-slate-300 hover:bg-slate-400 hover:shadow-slate-400/50'
 			: 'bg-red-300 hover:bg-red-400 hover:shadow-red-400/50'} rounded-md"
 	>
@@ -64,6 +55,3 @@
 		</div>
 	</div>
 </label>
-
-<style>
-</style>

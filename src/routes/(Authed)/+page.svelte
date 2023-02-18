@@ -1,53 +1,49 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
+	import type { userAmmo } from 'src/types';
+	import { db } from '../../firebase';
+	import { doc, getDoc } from 'firebase/firestore';
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
-	import { userData } from '../../store/user';
 	import { onMount } from 'svelte';
+	import { restockNumber } from '../../store/user';
 
 	let innerWidth = 0;
-	//import jsonData from '../../data.json';
+	let loading = true;
+	//import data from '../../data.json';
+	let data: userAmmo[];
+	$: data = [];
 
-	export let data: PageData;
-	let parsedData: userAmmo[];
-	let dropDownSelected: string;
-	let optionsDropDown: string[] = [];
+	let dropDownSelected = 'All';
 
-	parsedData = Object.values(data);
-	$: filteredData = parsedData.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-
-	interface userAmmo {
-		name: string;
-		count: number;
-		grain: number;
-		type: string;
-	}
-
-	parsedData.filter((item) => {
-		var i = optionsDropDown.findIndex((x) => x == item.name);
-		if (i <= -1) {
-			optionsDropDown.push(item.name);
-		}
-		return null;
-	});
+	$: filteredData = dropDownSelected === 'All' ? data : filterData(dropDownSelected);
+	$: optionsDropDown = [...new Set(data.map((i) => i.name))];
 
 	function filterData(selected: string) {
-		if (selected === 'All') {
-			filteredData = parsedData;
-			return;
-		}
-
-		filteredData = parsedData.filter((e) => {
+		return data.filter((e) => {
 			return e.name === selected;
 		});
-
-		return;
 	}
 
-	onMount(() => {
-		console.log('On Mount');
-		console.log(parsedData);
+	async function getData() {
+		let user = JSON.parse(localStorage.user);
+
+		const docRef = doc(db, 'ammo', `${user.uid}`);
+		const docSnap = await getDoc(docRef);
+
+		if (docSnap.exists()) {
+			if (Object.keys(docSnap.data()).length !== 0) {
+				const fetchedData: userAmmo[] = Object.values(docSnap.data()?.ammo);
+				data = fetchedData;
+				data.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+
+				$restockNumber = docSnap.data()?.restockNumber;
+			}
+		}
+	}
+
+	onMount(async () => {
+		getData();
+		loading = false;
 	});
 </script>
 
@@ -74,10 +70,24 @@
 	<div class="w-full flex justify-center my-5">
 		<div class="w-10/12 lg:w-11/12 2xl:w-8/12">
 			<div class="grid grid-cols-2 md:grid-cols-4 gap-3 xl:grid-cols-5 xl:gap-7">
-				{#each filteredData as ammo}
-					<svelte:component this={CardCountImage} {ammo} />
-				{/each}
-				<AddCard />
+				{#if loading}
+					<p>Loading...</p>
+				{:else}
+					{#each Object.values(filteredData) as ammo (ammo.ammoUUID)}
+						<svelte:component
+							this={CardCountImage}
+							{ammo}
+							on:newData={(e) => {
+								data = e.detail;
+							}}
+						/>
+					{/each}
+					<AddCard
+						on:newData={(e) => {
+							data = e.detail;
+						}}
+					/>
+				{/if}
 			</div>
 		</div>
 	</div>
