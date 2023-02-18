@@ -10,3 +10,9 @@ node_modules
 .output
 
 documentation
+emulatorData
+functions
+Secrets
+vite.config.js.timestamp-1675709198555.mjs
+firestore-debug.log
+ui-debug.log
