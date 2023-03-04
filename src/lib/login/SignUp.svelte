@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-	import { auth } from '../../firebase';
+	import { doc, setDoc } from 'firebase/firestore';
+	import { auth, db } from '../../firebase';
 	import ErrorMessage from '$lib/ErrorMessage.svelte';
 	import SubmitButton from '$lib/SubmitButton.svelte';
 
@@ -25,6 +26,12 @@
 						updateProfile(auth.currentUser, {
 							displayName: username
 						});
+						try {
+							const dataRef = doc(db, 'ammo', auth.currentUser.uid);
+							setDoc(dataRef, { ammo: [] });
+						} catch (e) {
+							console.log(e);
+						}
 						goto('/');
 					}
 				})

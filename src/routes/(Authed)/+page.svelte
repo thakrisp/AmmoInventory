@@ -13,9 +13,9 @@
 	let data: userAmmo[];
 	$: data = [];
 
-	let dropDownSelected = 'All';
+	let dropDownSelected = 'All ammos';
 
-	$: filteredData = dropDownSelected === 'All' ? data : filterData(dropDownSelected);
+	$: filteredData = dropDownSelected === 'All ammos' ? data : filterData(dropDownSelected);
 	$: optionsDropDown = [...new Set(data.map((i) => i.name))];
 
 	function filterData(selected: string) {
@@ -36,7 +36,7 @@
 				data = fetchedData;
 				data.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
-				$restockNumber = docSnap.data()?.restockNumber;
+				$restockNumber = docSnap.data()?.restockNumber | 0;
 			}
 		}
 	}
@@ -61,7 +61,7 @@
 			bind:value={dropDownSelected}
 			on:change={() => filterData(dropDownSelected)}
 		>
-			<option>All</option>
+			<option>All ammos</option>
 			{#each optionsDropDown as ammoOptions}
 				<option value={ammoOptions}>{ammoOptions}</option>
 			{/each}
