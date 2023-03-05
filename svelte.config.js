@@ -15,13 +15,7 @@ const config = {
 	],
 
 	kit: {
-		adapter: adapter({
-			pages: 'public',
-			asserts: 'public',
-			fallback: null,
-			precompress: false
-		}),
-		outDir: 'public'
+		adapter: adapter()
 	}
 };
 
