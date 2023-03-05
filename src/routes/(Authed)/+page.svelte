@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { userAmmo } from 'src/types';
-	import { db } from '../../firebase';
+	import { auth, db } from '../../firebase';
 	import { doc, getDoc } from 'firebase/firestore';
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
-	import { onMount } from 'svelte';
-	import { restockNumber } from '../../store/user';
+	import { restockNumber, user } from '../../store/user';
 
 	let innerWidth = 0;
 	let loading = true;
@@ -32,7 +32,7 @@
 
 		if (docSnap.exists()) {
 			if (Object.keys(docSnap.data()).length !== 0) {
-				const fetchedData: userAmmo[] = Object.values(docSnap.data()?.ammo);
+				const fetchedData: userAmmo[] = Object.values(docSnap.data()?.ammo) || [];
 				data = fetchedData;
 				data.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
@@ -42,7 +42,9 @@
 	}
 
 	onMount(async () => {
-		getData();
+		if (localStorage.user !== undefined) {
+			await getData();
+		}
 		loading = false;
 	});
 </script>

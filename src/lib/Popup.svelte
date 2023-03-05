@@ -2,7 +2,7 @@
 	import type { userAmmo } from 'src/types';
 	import ErrorMessage from './ErrorMessage.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+	import { doc, getDoc, updateDoc } from 'firebase/firestore';
 	import { db } from '../firebase';
 	import { restockNumber as storeRestockNumber, user } from '../store/user';
 	import shortUUID from 'short-uuid';
@@ -30,7 +30,7 @@
 	// if (import.meta.env.DEV) {
 	// 	(name = 'Test Name2'), (count = 125), (type = 'Test Type2'), (grain = 112);
 	// }
-	let delteData = async () => {
+	let deleteData = async () => {
 		const dataRef = doc(db, 'ammo', userUID);
 		let data: userAmmo[] = await fetchData();
 
@@ -45,7 +45,7 @@
 
 	let saveData = async () => {
 		const dataRef = doc(db, 'ammo', userUID);
-		let data: userAmmo[] = await fetchData();
+		let data: userAmmo[] = (await fetchData()) || [];
 
 		let indexToChange = data.findIndex((e: userAmmo) => e.ammoUUID === ammoUUID);
 
@@ -138,7 +138,7 @@
 			</label>
 		</div>
 		<div class="flex justify-between my-2">
-			<button class="btn btn-error" on:click={delteData}>Delete</button>
+			<button class="btn btn-error" on:click={deleteData}>Delete</button>
 			<button class="btn" on:click={saveData}>Save</button>
 		</div>
 	</label>

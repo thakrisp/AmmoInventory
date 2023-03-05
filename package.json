@@ -1,8 +1,8 @@
 {
 	"name": "ammo_inventory",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"scripts": {
-		"emulator": "firebase emulators:start --only functions,auth,firestore",
+		"emulator": "firebase emulators:start --only functions,auth,firestore --import='./emulatorData'",
 		"dev": "vite dev --host",
 		"build": "vite build",
 		"package": "svelte-kit package",
@@ -38,6 +38,7 @@
 	"type": "module",
 	"dependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
+		"@sveltejs/adapter-static": "^2.0.1",
 		"cookie": "^0.5.0",
 		"daisyui": "^2.46.1",
 		"firebase": "^9.15.0",

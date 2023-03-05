@@ -1,6 +1,8 @@
 <script lang="ts">
+	export const prerender = true;
+
 	import '../app.css';
-	import { user as userStore, userData } from '../store/user';
+	import { user as userStore } from '../store/user';
 	import { auth } from '../firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onMount } from 'svelte';
@@ -11,11 +13,13 @@
 			if (!user) {
 				goto('/login');
 			} else {
-				userStore.set({ uid: user?.uid, displayName: user?.displayName, email: user?.email });
-				localStorage.setItem(
-					'user',
-					JSON.stringify({ uid: user?.uid, displayName: user?.displayName, email: user?.email })
-				);
+				let userData = {
+					uid: user?.uid,
+					displayName: user?.displayName || '',
+					email: user?.email || ''
+				};
+				userStore.set(userData);
+				localStorage.setItem('user', JSON.stringify(userData));
 			}
 		});
 	});

@@ -30,7 +30,7 @@
 							const dataRef = doc(db, 'ammo', auth.currentUser.uid);
 							setDoc(dataRef, { ammo: [] });
 						} catch (e) {
-							console.log(e);
+							console.error(e);
 						}
 						goto('/');
 					}
