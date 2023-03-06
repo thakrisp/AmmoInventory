@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { userAmmo } from 'src/types';
-	import Popup from '$lib/popup.svelte';
+	import type { userAmmo } from '../../types';
+	import Popup from '$lib/Popup.svelte';
 	import { restockNumber } from '../../store/user';
 	export let ammo: userAmmo;
 

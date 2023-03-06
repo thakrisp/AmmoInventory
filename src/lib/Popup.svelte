@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { userAmmo } from 'src/types';
+	import type { userAmmo } from '../types';
 	import ErrorMessage from './ErrorMessage.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { doc, getDoc, updateDoc } from 'firebase/firestore';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Popup from '$lib/popup.svelte';
+	import Popup from '$lib/Popup.svelte';
 
 	let showModal = false;
 </script>

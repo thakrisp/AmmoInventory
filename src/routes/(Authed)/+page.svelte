@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { userAmmo } from 'src/types';
-	import { auth, db } from '../../firebase';
+	import type { userAmmo } from '../../types';
+	import { db } from '../../firebase';
 	import { doc, getDoc } from 'firebase/firestore';
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
-	import { restockNumber, user } from '../../store/user';
+	import { restockNumber } from '../../store/user';
 
 	let innerWidth = 0;
 	let loading = true;
