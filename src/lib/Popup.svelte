@@ -14,6 +14,10 @@
 	export let type: string = '';
 	export let grain: number = 0;
 	export let restockNumber: number = $storeRestockNumber;
+
+	let ammoCounts: number[] = [10, 20, 50, 100, 500, 1000];
+	let quantityModeAdd = true
+
 	let errorMessage: string = '';
 
 	const dispatch = createEventDispatcher();
@@ -42,6 +46,14 @@
 			dispatch('newData', data);
 		}
 	};
+
+	function addAmmo(quantity: number) {
+		if(quantityModeAdd) {
+			count += quantity;
+		} else{
+			count -= quantity;
+		}
+	}
 
 	let saveData = async () => {
 		const dataRef = doc(db, 'ammo', userUID);
@@ -117,6 +129,18 @@
 						class="input input-bordered text-white"
 					/>
 				</label>
+			</div>
+			<div class="flex flex-col">
+				<div
+					class="btn mb-2 {!quantityModeAdd ? 'bg-red-400 text-black' : ''} hover:text-white"
+					on:click={() => quantityModeAdd = !quantityModeAdd}>
+						{quantityModeAdd ? "Add" : "Remove"}
+					</div>
+				<div class="grid grid-cols-3 gap-3">
+					{#each ammoCounts as quantity}
+						<button class="btn" on:click={() => addAmmo(quantity)}>+{quantity}</button>
+					{/each}
+				</div>
 			</div>
 			<label class="input-group input-group-vertical">
 				<span>type</span>
