@@ -16,7 +16,8 @@
 	export let restockNumber: number = $storeRestockNumber;
 
 	let ammoCounts: number[] = [10, 20, 50, 100, 500, 1000];
-	let quantityModeAdd = true
+	let quantityModeAdd = true;
+	let customQuantity = 0;
 
 	let errorMessage: string = '';
 
@@ -48,9 +49,9 @@
 	};
 
 	function addAmmo(quantity: number) {
-		if(quantityModeAdd) {
+		if (quantityModeAdd) {
 			count += quantity;
-		} else{
+		} else {
 			count -= quantity;
 		}
 	}
@@ -130,18 +131,51 @@
 					/>
 				</label>
 			</div>
-			<div class="flex flex-col">
-				<div
-					class="btn mb-2 {!quantityModeAdd ? 'bg-red-400 text-black' : ''} hover:text-white"
-					on:click={() => quantityModeAdd = !quantityModeAdd}>
-						{quantityModeAdd ? "Add" : "Remove"}
+
+			<div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+				<input type="checkbox" />
+				<div class="collapse-title text-xl font-medium">Add/Remove Ammo</div>
+				<div class="collapse-content">
+					<div class="flex flex-col">
+						<div class="btn-group justify-center mb-2">
+							<button
+								on:click={() => (quantityModeAdd = true)}
+								class="btn {quantityModeAdd ? "bg-green-400 text-gray-700 hover:bg-green-600" : ""}"
+							>Add
+							</button>
+
+							<button
+								on:click={() => (quantityModeAdd = false)}
+								class="btn {!quantityModeAdd ? ' btn-error' : ''}"
+								>Remove
+							</button>
+						</div>
+						<div class="grid grid-cols-3 gap-3">
+							{#each ammoCounts as quantity}
+								<button
+									class="btn"
+									on:click={() => addAmmo(quantity)}
+								>{quantityModeAdd ? "+" : "-"}{quantity}</button>
+							{/each}
+						</div>
+						<div class="divider">Or</div>
+						<div class="input-group justify-center">
+							<input
+								type="number"
+								bind:value={customQuantity}
+								placeholder="1000"
+								class="input input-bordered"
+							/>
+							<button
+								class="btn btn-square w-fit px-2 {quantityModeAdd ? "bg-green-400 text-gray-700 hover:bg-green-600" : "btn-error"}"
+								on:click={() => addAmmo(customQuantity)}
+							>{quantityModeAdd ? 'Add' : 'Remove'}
+							</button>
+						</div>
 					</div>
-				<div class="grid grid-cols-3 gap-3">
-					{#each ammoCounts as quantity}
-						<button class="btn" on:click={() => addAmmo(quantity)}>+{quantity}</button>
-					{/each}
 				</div>
 			</div>
+
 			<label class="input-group input-group-vertical">
 				<span>type</span>
 				<input
