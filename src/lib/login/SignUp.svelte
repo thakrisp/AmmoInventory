@@ -97,7 +97,7 @@
 			required
 		/>
 	</div>
+	<div class="flex flex-row-reverse justify-between mt-2">
+		<SubmitButton on:pageRequesting={handleMessage} bind:isDisabled pageStatus={'Sign Up'} />
+	</div>
 </form>
-<div class="flex flex-row-reverse justify-between mt-2">
-	<SubmitButton on:pageRequesting={handleMessage} bind:isDisabled pageStatus={'Sign Up'} />
-</div>

@@ -34,7 +34,7 @@
 		id="emailAddressInput"
 		class="bg-transparent border-b-2 border-black focus:outline-none"
 	/>
+	<div class="flex flex-row-reverse justify-between mt-2">
+		<SubmitButton bind:isDisabled pageStatus={'reset Password'} on:pageRequesting={handleMessage} />
+	</div>
 </form>
-<div class="flex flex-row-reverse justify-between mt-2">
-	<SubmitButton bind:isDisabled pageStatus={'reset Password'} on:pageRequesting={handleMessage} />
-</div>

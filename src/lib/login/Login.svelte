@@ -63,10 +63,10 @@
 			class="bg-transparent border-b-2 border-black focus:outline-none"
 		/>
 	</div>
+	<div class="flex flex-row-reverse justify-between mt-2">
+		<SubmitButton on:pageRequesting={handleMessage} {isDisabled} pageStatus={'Login'} />
+		<button on:click={changeToForgotPassword} class="underline flex self-center"
+			>Forgot Password</button
+		>
+	</div>
 </form>
-<div class="flex flex-row-reverse justify-between mt-2">
-	<SubmitButton on:pageRequesting={handleMessage} {isDisabled} pageStatus={'Login'} />
-	<button on:click={changeToForgotPassword} class="underline flex self-center"
-		>Forgot Password</button
-	>
-</div>
