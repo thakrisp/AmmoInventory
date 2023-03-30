@@ -5,9 +5,7 @@
 
 	function signOutUser() {
 		signOut(auth).then(() => {
-			localStorage.removeItem('UserData');
-			localStorage.removeItem('User');
-			localStorage.removeItem('restockNumber');
+			localStorage.clear();
 		});
 	}
 </script>

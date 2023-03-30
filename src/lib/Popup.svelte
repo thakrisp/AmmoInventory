@@ -4,7 +4,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { doc, getDoc, updateDoc } from 'firebase/firestore';
 	import { db } from '../firebase';
-	import { restockNumber as storeRestockNumber, user } from '../store/user';
+	import { restockNumber as storeRestockNumber, user, autoSaveAmmo } from '../store/user';
 	import shortUUID from 'short-uuid';
 
 	$: userUID = $user.uid;
@@ -22,7 +22,12 @@
 	let errorMessage: string = '';
 
 	const dispatch = createEventDispatcher();
-	const close = () => dispatch('close');
+	const close = () => {
+		if ($autoSaveAmmo) {
+			saveData();
+		}
+		dispatch('close');
+	};
 
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key == 'Escape') close();
@@ -68,7 +73,7 @@
 				data[indexToChange].count = count;
 				data[indexToChange].restockNumber = restockNumber;
 				data[indexToChange].type = type;
-				data[indexToChange].grain = grain;
+				data[indexToChange].grain = grain.toString();
 			} else {
 				data.push({ ammoUUID, restockNumber, name, count, grain, type });
 			}
@@ -140,8 +145,8 @@
 						<div class="btn-group justify-center mb-2">
 							<button
 								on:click={() => (quantityModeAdd = true)}
-								class="btn {quantityModeAdd ? "bg-green-400 text-gray-700 hover:bg-green-600" : ""}"
-							>Add
+								class="btn {quantityModeAdd ? 'bg-green-400 text-gray-700 hover:bg-green-600' : ''}"
+								>Add
 							</button>
 
 							<button
@@ -152,10 +157,9 @@
 						</div>
 						<div class="grid grid-cols-3 gap-3">
 							{#each ammoCounts as quantity}
-								<button
-									class="btn"
-									on:click={() => addAmmo(quantity)}
-								>{quantityModeAdd ? "+" : "-"}{quantity}</button>
+								<button class="btn" on:click={() => addAmmo(quantity)}
+									>{quantityModeAdd ? '+' : '-'}{quantity}</button
+								>
 							{/each}
 						</div>
 						<div class="divider">Or</div>
@@ -167,9 +171,11 @@
 								class="input input-bordered"
 							/>
 							<button
-								class="btn btn-square w-fit px-2 {quantityModeAdd ? "bg-green-400 text-gray-700 hover:bg-green-600" : "btn-error"}"
+								class="btn btn-square w-fit px-2 {quantityModeAdd
+									? 'bg-green-400 text-gray-700 hover:bg-green-600'
+									: 'btn-error'}"
 								on:click={() => addAmmo(customQuantity)}
-							>{quantityModeAdd ? 'Add' : 'Remove'}
+								>{quantityModeAdd ? 'Add' : 'Remove'}
 							</button>
 						</div>
 					</div>
@@ -188,7 +194,7 @@
 			<label class="input-group input-group-vertical">
 				<span>Grain</span>
 				<input
-					type="number"
+					type="text"
 					placeholder="111"
 					bind:value={grain}
 					class="input input-bordered text-white"
