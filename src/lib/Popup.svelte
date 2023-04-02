@@ -14,6 +14,7 @@
 	export let type: string = '';
 	export let grain: string = '';
 	export let restockNumber: number = $storeRestockNumber;
+	let saved = false;
 
 	let ammoCounts: number[] = [10, 20, 50, 100, 500, 1000];
 	let quantityModeAdd = true;
@@ -23,11 +24,15 @@
 
 	const dispatch = createEventDispatcher();
 	const close = () => {
+		if (saved === false && $autoSaveAmmo) {
+			saveData();
+		}
 		dispatch('close');
+		saved = true;
 	};
 
 	const handleKeydown = (e: KeyboardEvent) => {
-		if (e.key == 'Escape') close();
+		if (e.key === 'Escape') close();
 	};
 
 	let validateForm = () => {
@@ -76,18 +81,20 @@
 			}
 			await updateDoc(dataRef, { ammo: data });
 			dispatch('newData', data);
-			close();
+			if (!saved) {
+				close();
+			}
 		} else {
 			errorMessage = 'form isnt filled out completely';
 		}
 	};
 
-	async function fetchData() {
+	let fetchData = async () => {
 		const docRef = doc(db, 'ammo', userUID);
 		const docSnap = await getDoc(docRef);
 
 		return docSnap.data()?.ammo;
-	}
+	};
 </script>
 
 <svelte:window on:keydown={handleKeydown} />

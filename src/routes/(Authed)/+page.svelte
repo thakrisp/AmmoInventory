@@ -5,7 +5,7 @@
 	import { doc, getDoc } from 'firebase/firestore';
 	import AddCard from '$lib/addCard/addCard.svelte';
 	import CardCountImage from '$lib/card/cardCountImage.svelte';
-	import { restockNumber } from '../../store/user';
+	import { autoSaveAmmo, restockNumber } from '../../store/user';
 
 	let innerWidth = 0;
 	let loading = true;
@@ -33,11 +33,17 @@
 
 		if (docSnap.exists()) {
 			if (Object.keys(docSnap.data()).length !== 0) {
-				const fetchedData: userAmmo[] = Object.values(docSnap.data()?.ammo) || [];
-				data = fetchedData;
-
-				$restockNumber = docSnap.data()?.restockNumber | 0;
+				const fetchedAmmoData: userAmmo[] = Object.values(docSnap.data()?.ammo) || [];
+				data = fetchedAmmoData;
 			}
+			restockNumber.set(docSnap.data()?.restockNumber || 101);
+			localStorage.setItem('restockNumber', docSnap.data()?.restockNumber ?? 101);
+
+			autoSaveAmmo.set(docSnap.data()?.autoSave === undefined ? false : docSnap.data()?.autoSave);
+			localStorage.setItem(
+				'autoSave',
+				docSnap.data()?.autoSave === undefined ? false : docSnap.data()?.autoSave
+			);
 		}
 	}
 

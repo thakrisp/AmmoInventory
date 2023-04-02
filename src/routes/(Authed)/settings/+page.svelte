@@ -12,20 +12,26 @@
 	});
 
 	const getAutoSaveData = async () => {
-		let user = JSON.parse(localStorage.user);
+		let temp = localStorage.getItem('autoSave');
+		if (temp !== null) {
+			autoSaveAmmo.set(localStorage.getItem('autoSave') === 'true' ? true : false);
+			return;
+		} else {
+			let user = JSON.parse(localStorage.user);
 
-		const docRef = doc(db, 'ammo', user.uid);
-		const docSnap = await getDoc(docRef);
+			const docRef = doc(db, 'ammo', user.uid);
+			const docSnap = await getDoc(docRef);
 
-		if (docSnap.exists()) {
-			autoSaveAmmo.set(docSnap.data().AutoSave);
+			if (docSnap.exists()) {
+				autoSaveAmmo.set(docSnap.data().autoSave);
+			}
 		}
 	};
 
 	const handleAutoSaveChange = (event: any) => {
 		const docRef = doc(db, 'ammo', userUID);
-		updateDoc(docRef, { AutoSave: event.target.checked });
-		//localStorage.setItem('ammoAutoSave', JSON.stringify(event.target.checked));
+		updateDoc(docRef, { autoSave: event.target.checked });
+		localStorage.setItem('autoSave', JSON.stringify(event.target.checked));
 	};
 
 	const saveRestockNumber = async () => {
@@ -52,7 +58,7 @@
 					placeholder="1000"
 					id="panicNumber"
 					bind:value={$restockNumber}
-					class="w-4/5 mr-2 bg-gray-600 border-b border-b-black focus:border-none focus:rounded"
+					class="w-4/5 mr-2 pl-2 bg-gray-600 border-b border-b-black focus:border-none focus:rounded"
 				/>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
@@ -68,7 +74,6 @@
 			<label class="label cursor-pointer">
 				<span class="label-text">AutoSave ammos</span>
 				<input
-					disabled
 					type="checkbox"
 					class="toggle {$autoSaveAmmo ? 'toggle-accent' : ''}"
 					on:change={handleAutoSaveChange}
