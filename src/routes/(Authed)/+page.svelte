@@ -10,8 +10,9 @@
 	let innerWidth = 0;
 	let loading = true;
 	//import data from '../../data.json';
-	let data: userAmmo[];
-	$: data = [];
+	let data: userAmmo[] = [];
+	//$: data = [];
+	$: data.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
 	let dropDownSelected = 'All ammos';
 
@@ -34,7 +35,6 @@
 			if (Object.keys(docSnap.data()).length !== 0) {
 				const fetchedData: userAmmo[] = Object.values(docSnap.data()?.ammo) || [];
 				data = fetchedData;
-				data.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
 				$restockNumber = docSnap.data()?.restockNumber | 0;
 			}
