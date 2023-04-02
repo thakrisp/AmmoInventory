@@ -12,7 +12,7 @@
 	export let name: string = '';
 	export let count: number = 0;
 	export let type: string = '';
-	export let grain: number = 0;
+	export let grain: string = '';
 	export let restockNumber: number = $storeRestockNumber;
 
 	let ammoCounts: number[] = [10, 20, 50, 100, 500, 1000];
@@ -23,9 +23,6 @@
 
 	const dispatch = createEventDispatcher();
 	const close = () => {
-		if ($autoSaveAmmo) {
-			saveData();
-		}
 		dispatch('close');
 	};
 
@@ -34,7 +31,7 @@
 	};
 
 	let validateForm = () => {
-		return name !== '' && count > 0 && type !== '' && grain > 0;
+		return name !== '' && count > 0 && type !== '' && grain !== '';
 	};
 
 	// if (import.meta.env.DEV) {

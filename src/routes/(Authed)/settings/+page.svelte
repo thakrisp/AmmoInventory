@@ -42,31 +42,40 @@
 </script>
 
 <div class="mx-10 flex justify-center">
-	<div class="flex flex-col bg-gray-600 rounded-lg p-5 w-4/5 md:w-2/5">
-		<label for="panicNumber" class="text-red-200 pb-2">Restocking time number</label>
-		<div class="flex justify-between">
-			<input
-				type="number"
-				placeholder="1000"
-				id="panicNumber"
-				bind:value={$restockNumber}
-				class="w-32 pl-2 mr-2 bg-gray-600 border-b border-b-black focus:border-none focus:rounded"
-			/>
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-
-			<div on:click|preventDefault={saveRestockNumber} class="btn btn-sm {saving ? 'loading' : ''}">
-				{saving ? 'Saving' : 'Save'}
+	<div class="flex flex-col bg-gray-600 rounded-lg p-3 w-11/12 md:w-2/5">
+		<h1 class="text-2xl">Settings</h1>
+		<div>
+			<label for="panicNumber" class="text-red-200 pb-2">Restocking time number</label>
+			<div class="flex justify-between">
+				<input
+					type="number"
+					placeholder="1000"
+					id="panicNumber"
+					bind:value={$restockNumber}
+					class="w-4/5 mr-2 bg-gray-600 border-b border-b-black focus:border-none focus:rounded"
+				/>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					on:click|preventDefault={saveRestockNumber}
+					class="btn btn-sm w-1/3 sm:w-1/5 p-2 px-3 {saving ? 'loading' : ''}"
+				>
+					{saving ? 'Saving' : 'Save'}
+				</div>
 			</div>
 		</div>
-		<label class="label cursor-pointer">
-			<span class="label-text">AutoSave ammos</span>
-			<input
-				type="checkbox"
-				class="toggle {$autoSaveAmmo ? 'toggle-accent' : ''}"
-				on:change={handleAutoSaveChange}
-				bind:checked={$autoSaveAmmo}
-			/>
-		</label>
+		<div class="mt-2">
+			<h1 class="text-red-200">Auto Save ammo</h1>
+			<label class="label cursor-pointer">
+				<span class="label-text">AutoSave ammos</span>
+				<input
+					disabled
+					type="checkbox"
+					class="toggle {$autoSaveAmmo ? 'toggle-accent' : ''}"
+					on:change={handleAutoSaveChange}
+					bind:checked={$autoSaveAmmo}
+				/>
+			</label>
+		</div>
 	</div>
 </div>
 
